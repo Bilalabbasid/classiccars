@@ -37,28 +37,38 @@ export default function AuctionDetailPage({ params: paramsPromise }: PageProps) 
   const isWatched = watchlist.hasItem(currentLot.id)
   const relatedLots = getLiveLots().filter((l) => l.id !== currentLot.id).slice(0, 3)
 
-  const [bidAmount, setBidAmount] = useState(currentLot.currentBid + 500)
+  const [liveCurrentBid, setLiveCurrentBid] = useState(currentLot.currentBid)
+  const [bidCount, setBidCount] = useState(currentLot.bidCount)
+  const [bidAmount, setBidAmount] = useState(currentLot.currentBid + 1000)
   const [bidSubmitting, setBidSubmitting] = useState(false)
   const [bidHistory, setBidHistory] = useState(currentLot.bidHistory)
 
   const handleBid = async () => {
-    if (!auth.isRegistered) {
-      toast.error("Please register to bid first")
+    if (bidAmount <= liveCurrentBid) {
+      toast.error(
+        `Your bid (£${bidAmount.toLocaleString()}) must be higher than the current highest bid of £${liveCurrentBid.toLocaleString()}!`
+      )
       return
     }
-    if (bidAmount <= currentLot.currentBid) {
-      toast.error("Bid must exceed the current bid")
-      return
-    }
+
     setBidSubmitting(true)
-    await new Promise((r) => setTimeout(r, 800))
-    const newEntry = { bidder: "You", amount: bidAmount, time: new Date().toISOString() }
-    setBidHistory([newEntry, ...bidHistory])
-    currentLot.currentBid = bidAmount
-    currentLot.bidCount += 1
-    setBidAmount(bidAmount + 500)
+    await new Promise((r) => setTimeout(r, 600))
+
+    const newBid = {
+      bidder: "You (Highest Bidder)",
+      amount: bidAmount,
+      time: new Date().toISOString(),
+    }
+    setBidHistory([newBid, ...bidHistory])
+    setLiveCurrentBid(bidAmount)
+    setBidCount((prev) => prev + 1)
+    setBidAmount(bidAmount + 1000)
     setBidSubmitting(false)
-    toast.success("Bid placed successfully!")
+
+    toast.success(
+      `🏆 Bid Placed! You are currently the highest bidder (£${bidAmount.toLocaleString()}). You will be notified when the auction ends if you win!`,
+      { duration: 7000 }
+    )
   }
 
   const statusBadge = {
@@ -106,9 +116,9 @@ export default function AuctionDetailPage({ params: paramsPromise }: PageProps) 
 
               {/* Current bid */}
               <div className="mt-4 rounded-lg border border-graphite/10 bg-charcoal/5 p-5">
-                <p className="text-[10px] uppercase tracking-wider text-muted">Current Bid</p>
-                <p className="font-display text-3xl font-bold tracking-tight">{formatCompactPrice(currentLot.currentBid)}</p>
-                <p className="mt-1 text-xs text-muted flex items-center gap-1"><Gavel className="h-3 w-3" /> {currentLot.bidCount} bids</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted">Current Highest Bid</p>
+                <p className="font-display text-3xl font-bold tracking-tight text-carbon">{formatCompactPrice(liveCurrentBid)}</p>
+                <p className="mt-1 text-xs text-muted flex items-center gap-1"><Gavel className="h-3 w-3" /> {bidCount} bids placed</p>
                 {currentLot.status === "live" && (
                   <div className="mt-3">
                     <Countdown targetDate={currentLot.endsAt} />
@@ -129,35 +139,32 @@ export default function AuctionDetailPage({ params: paramsPromise }: PageProps) 
 
               {/* Bid form (live only) */}
               {currentLot.status === "live" && (
-                <div className="mt-6">
-                  <label className="text-xs font-medium uppercase tracking-wider text-muted">Your Bid</label>
-                  <div className="mt-2 flex gap-2">
+                <div className="mt-6 rounded-xl border border-graphite/20 bg-ivory p-5 shadow-sm">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-carbon">Place Your Bid</label>
+                  <p className="mt-1 text-xs text-muted">Minimum bid: £{(liveCurrentBid + 100).toLocaleString()}</p>
+                  <div className="mt-3 flex gap-2">
                     <Input
                       type="number"
                       value={bidAmount}
                       onChange={(e) => setBidAmount(Number(e.target.value))}
-                      className="flex-1"
+                      className="flex-1 text-lg font-bold border-graphite/30"
                     />
-                    <Button onClick={handleBid} disabled={bidSubmitting}>
-                      {bidSubmitting ? "Placing..." : "Place Bid"}
+                    <Button onClick={handleBid} disabled={bidSubmitting} size="lg" className="bg-accent hover:bg-accent/90 text-ivory">
+                      {bidSubmitting ? "Submitting..." : "Place Bid"}
                     </Button>
                   </div>
-                  <div className="mt-2 flex gap-2">
-                    {[500, 1000, 5000].map((inc) => (
+                  <div className="mt-3 flex gap-2">
+                    {[1000, 2500, 5000].map((inc) => (
                       <button
                         key={inc}
-                        onClick={() => setBidAmount(currentLot.currentBid + inc)}
-                        className="rounded-md border border-graphite/20 px-3 py-1 text-xs text-muted hover:bg-charcoal/5 transition-colors"
+                        type="button"
+                        onClick={() => setBidAmount(liveCurrentBid + inc)}
+                        className="rounded-md border border-graphite/30 bg-charcoal/5 px-3 py-1.5 text-xs font-semibold text-carbon hover:bg-carbon hover:text-ivory transition-colors"
                       >
                         +£{inc.toLocaleString()}
                       </button>
                     ))}
                   </div>
-                  {!auth.isRegistered && (
-                    <p className="mt-3 text-xs text-accent">
-                      <Link href="/auctions/register" className="underline">Register to bid</Link> before placing your bid.
-                    </p>
-                  )}
                 </div>
               )}
 
