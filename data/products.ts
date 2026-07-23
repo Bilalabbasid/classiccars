@@ -219,7 +219,7 @@ export const products: Product[] = [
     shortDescription: "Museum-grade 1:8 scale model by Amalgam Collection.",
     description: "An extraordinary 1:8 scale model of the legendary 1962 Ferrari 250 GTO, handcrafted by the artisans at Amalgam Collection in Bristol.",
     inStock: true,
-    limited: true,
+    limited: false,
     offerable: true,
     rating: 5.0,
   },
