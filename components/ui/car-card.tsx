@@ -34,10 +34,15 @@ export default function CarCard({ car, className = "" }: CarCardProps) {
       <Link href={`/cars/${car.slug}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
-            src={car.images[0]}
+            src={car.images[0] || "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1280&q=80"}
             alt={`${car.make} ${car.model} ${car.variant}`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              target.srcset = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1280&q=80"
+              target.src = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1280&q=80"
+            }}
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
           {/* Hover overlay */}

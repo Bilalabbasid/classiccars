@@ -33,10 +33,15 @@ export default function LotCard({ lot, className = "" }: LotCardProps) {
       <Link href={`/auctions/${lot.slug}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
-            src={lot.images[0]}
+            src={lot.images[0] || "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1280&q=80"}
             alt={lot.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              target.srcset = "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1280&q=80"
+              target.src = "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1280&q=80"
+            }}
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-carbon/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
