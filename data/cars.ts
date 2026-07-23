@@ -144,8 +144,8 @@ export const cars: Car[] = [
     steering: "RHD",
     badge: "Collector Grade",
     images: [
-      "/morgan plus 8 specs.jpeg",
       "/WhatsApp Image 2026-07-23 at 01.23.08.jpeg",
+      "/morgan plus 8 specs.jpeg",
       "/WhatsApp Image 2026-07-23 at 01.23.08 (1).jpeg",
       "/WhatsApp Image 2026-07-23 at 01.23.08 (2).jpeg",
     ],
@@ -185,8 +185,8 @@ export const cars: Car[] = [
     steering: "LHD",
     badge: "Just Arrived",
     images: [
+      "/WhatsApp Image 2026-07-23 at 01.23.08 (2).jpeg",
       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1280&q=80",
-      "https://images.unsplash.com/photo-1563120177503-4d6e9e7d1e91?auto=format&fit=crop&w=1280&q=80",
     ],
     description:
       "Just arrived from Italy, this original LHD 1971 Alfa Romeo 2000 Spider Veloce is finished in beautiful Rosso Carmen. Showing just 13,419 miles on the odometer.",
@@ -298,8 +298,8 @@ export const cars: Car[] = [
     topSpeed: "125 mph",
     steering: "LHD",
     images: [
-      "/fordmustangspecs.jpeg",
       "/WhatsApp Image 2026-07-23 at 01.23.07 (4).jpeg",
+      "/fordmustangspecs.jpeg",
       "/WhatsApp Image 2026-07-23 at 01.23.07 (5).jpeg",
     ],
     description:
