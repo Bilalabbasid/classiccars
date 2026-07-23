@@ -298,7 +298,7 @@ export const cars: Car[] = [
     topSpeed: "125 mph",
     steering: "LHD",
     images: [
-      "/WhatsApp Image 2026-07-23 at 01.23.07 (4).jpeg",
+      "/pic2.jpeg",
       "/fordmustangspecs.jpeg",
       "/WhatsApp Image 2026-07-23 at 01.23.07 (5).jpeg",
     ],
